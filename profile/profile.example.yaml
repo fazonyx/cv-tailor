@@ -23,7 +23,9 @@ contact:
   nationality: { en: "French citizen (EU)", fr: "Nationalite francaise (UE)" }
   email: "alex.morand@example.com"
   phone: "+33 6 00 00 00 00"
-  # photo: sources/photo.jpg      # optional, drawn as a circle in the sidebar
+  # Optional, drawn as a circle in the sidebar. Yours belongs in
+  # sources/ (git-ignored); this one is a placeholder monogram.
+  photo: profile/example-photo.png
   links:
     - label: "linkedin.com/in/example"
       url: "https://www.linkedin.com/in/example"

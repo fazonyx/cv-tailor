@@ -1,0 +1,9 @@
+# Everything the project itself needs
+-r requirements.txt
+
+# Tests
+pytest>=8.0
+
+# Regenerating the README images (tools/preview.py)
+PyMuPDF>=1.24
+Pillow>=10.0

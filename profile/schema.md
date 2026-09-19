@@ -41,7 +41,8 @@ contact:
   nationality: "French citizen (EU)"
   email: "..."                   # an overlay can hide it: hide_contact: [email]
   phone: "..."
-  photo: sources/photo.jpg       # optional, drawn as a circle in the sidebar
+  photo: sources/photo.jpg       # optional, circle in the sidebar;
+                                 # an overlay drops it with photo: false
   links:
     - label: "linkedin.com/in/example"
       url: "https://www.linkedin.com/in/example"

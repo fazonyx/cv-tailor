@@ -39,7 +39,7 @@ availability:
 # the room, and the degree is a checkbox rather than an argument.
 layout:
   right: [experience, skills, projects, certifications]
-  left: [contact, badges, languages, education, interests]
+  left: [photo, contact, badges, languages, education, interests]
 
 # Section headings are data too.
 titles:

@@ -24,6 +24,7 @@ summary:
 
 availability: "Available from March 2027"
 hide_contact: [phone]
+photo: false          # no photo on a CV sent to the US
 
 layout:
   right: [experience, skills, education, certifications]

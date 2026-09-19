@@ -146,6 +146,18 @@ nothing to install and nothing to license.
 - A GitHub Actions workflow that runs those tests and rebuilds the examples on
   every push, so the one-page rule is enforced by CI and not by memory.
 
+## Working on the repo itself
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests -q          # the guardrails have their own tests
+python build.py                    # rebuild and check the examples
+python tools/preview.py            # regenerate the images in this README
+```
+
+The pictures above are generated from the committed PDFs, so a layout change
+can be reflected in the README instead of slowly drifting away from it.
+
 ## Your data stays yours
 
 `sources/`, `profile/profile.yaml` and generated PDFs are git-ignored. A

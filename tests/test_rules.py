@@ -168,3 +168,16 @@ def test_an_intentionally_blank_translation_is_allowed():
     target = overlay()
     cv = build(profile, target, "fr")
     assert not checks.check_translations(profile, target, cv, "fr")
+
+
+def test_the_photo_is_drawn_when_the_profile_has_one():
+    """The photo path is easy to break and invisible in a text diff."""
+    from cvkit.render import render
+
+    with_photo = overlay(layout={"left": ["photo", "contact"],
+                                 "right": ["experience"]})
+    without = overlay(layout={"left": ["contact"], "right": ["experience"]})
+    assert Path(PROFILE["contact"]["photo"]).exists()
+    photo_margin = render(PROFILE, with_photo, tmp_pdf("photo"))[0][1]
+    plain_margin = render(PROFILE, without, tmp_pdf("no_photo"))[0][1]
+    assert plain_margin > photo_margin + 25      # the circle takes ~30mm

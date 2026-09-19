@@ -20,12 +20,10 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements-dev.txt
 
       - name: Test the guardrails
-        run: |
-          pip install pytest
-          python -m pytest tests -q
+        run: python -m pytest tests -q
 
       - name: Build and check every application
         run: python build.py
