@@ -69,11 +69,18 @@ def _draw_experience(page, cv):
             current_group = None
 
         title = experience.client or experience.employer
-        subtitle = " · ".join(
-            part for part in (experience.role, experience.city) if part)
-        if not experience.client and experience.employer_role and not group:
-            subtitle = " · ".join(
-                part for part in (experience.employer_role, experience.city) if part)
+        if experience.client or group:
+            # Consulting: the band above carries the contract title, so the
+            # line below is free to describe the mission for this offer.
+            parts = [experience.role, experience.city]
+        else:
+            # Salaried: the contract title is a fact and leads. An overlay's
+            # framing follows it rather than being dropped - without this, a
+            # `role:` override is silently ignored for anyone not a consultant.
+            parts = [experience.employer_role, experience.city]
+            if experience.role and experience.role != experience.employer_role:
+                parts = [experience.employer_role, experience.role, experience.city]
+        subtitle = " · ".join(part for part in parts if part)
         page.experience(
             title=title,
             subtitle=subtitle or None,
