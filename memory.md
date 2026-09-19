@@ -68,6 +68,34 @@ one moment the tool has to speak is when the content is wrong.
 throwaway script at first, which meant nobody could regenerate them after a
 layout change and they would have drifted away from the real output.
 
+## Found by running the loop end to end
+
+The four commands were written before anyone had used them. Playing them once
+from a clean clone, on an invented profile drafted from messy invented sources,
+changed four things:
+
+- **A `role:` override was silently dropped for salaried people.** The renderer
+  preferred the contract title and stopped there, so everyone who is not a
+  consultant got no framing at all - the feature the README leads with. Both
+  now show: contract title first, because it is the fact, framing after it.
+- **Short gap terms could not be written.** The advice was to prefer "Golang"
+  over "Go" to avoid matching every "go" in a sentence, which meant the check
+  missed the word people actually put on a CV. `case_sensitive: true` fixes the
+  real case instead of working around it.
+- **Unverified fields shipped silently.** Drafting a profile from old documents
+  leaves guesses; a `# ?` comment marking one was read by nobody. The build now
+  reports them until they are settled - the first draft of the dry run invented
+  a notice period that nothing in the sources supported, and it went straight
+  into a PDF.
+- **Nothing listed the fact ids.** Writing `- from: vx-runtime` means knowing
+  it exists, and the only way was scrolling the profile. `build.py --facts`
+  prints them.
+
+The other lesson has no code behind it: a first pass on a five-year profile
+comes out half empty, and the honest answer is to put back a section rather
+than to pad. That is now written in CLAUDE.md, because the instinct is to
+invent something to fill the space.
+
 ## Deliberately not done
 
 - **CI does not verify that the committed PDFs match a fresh build.** Tempting

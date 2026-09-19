@@ -64,6 +64,8 @@ experience:
     employer_role: "Software Engineer (consultant)"
     client: NORTHBAY LOGISTICS   # omit for a salaried job or an internship
     role: "Backend Engineer - Fleet Tracking"   # mission framing, reframable
+    # On a salaried job (no client), the contract title leads and this line
+    # follows it: "QA Engineer - Test infrastructure & CI - Toulouse".
     city: "Lyon, France"
     period: "2025"
     tags: [Logistics, SaaS]      # small pills, for the recruiter's eye scan
@@ -123,8 +125,20 @@ keep asking for, and for the wording you must never use - "AWS Certified"
 while the exam is not passed, for instance.
 
 Write these down when you are calm, not when you are staring at a job ad that
-asks for all of them. Matching is case-insensitive, so prefer distinctive terms
-("Golang", not "Go").
+asks for all of them.
+
+Matching is case-insensitive by default. For a short name that is also a common
+word - "Go", "R", "C" - set `case_sensitive: true` rather than writing
+"Golang": the point is to catch the word you would actually type on a CV.
+
+```yaml
+  - term: Go
+    case_sensitive: true
+    hedge: "reading level"
+```
+
+A field you could not verify keeps a `# ? note` comment on its line. The build
+reports it on every run, so an unchecked guess cannot quietly ship in a PDF.
 
 ---
 

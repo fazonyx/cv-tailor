@@ -5,6 +5,7 @@
     python build.py northwind       # build one application
     python build.py --strict        # treat warnings as failures
     python build.py --list          # show what would be built
+    python build.py --facts P.yaml  # list the ids an overlay can point to
 
 Exit code is non-zero when a check fails, so CI can gate on it.
 """
@@ -33,6 +34,36 @@ def emit(text=""):
     except UnicodeEncodeError:
         encoding = sys.stdout.encoding or "ascii"
         print(str(text).encode(encoding, "backslashreplace").decode(encoding))
+
+
+def list_facts(profile_path):
+    """Print the ids an overlay can point to.
+
+    Writing `- from: vx-runtime` means knowing that vx-runtime exists. Without
+    this, every overlay starts by scrolling through the profile.
+    """
+    profile = load_yaml(profile_path)
+    emit(f"{profile_path}\n")
+    for group in profile.get("employers") or []:
+        emit(f"  [employer] {group['id']}: {group.get('name')}")
+    for experience in profile.get("experience") or []:
+        label = experience.get("client") or experience.get("employer")
+        emit(f"  [experience] {experience['id']}: {label} ({experience.get('period', 'no date')})")
+        for bullet in experience.get("bullets") or []:
+            text = next(iter(bullet["text"].values())) if isinstance(bullet.get("text"), dict) \
+                else bullet.get("text", "")
+            emit(f"      {bullet['id']}: {text[:68]}{'...' if len(text) > 68 else ''}")
+    for section in ("education", "certifications", "projects"):
+        for entry in profile.get(section) or []:
+            name = entry.get("school") or entry.get("name") or entry.get("text", "")
+            if isinstance(name, dict):
+                name = next(iter(name.values()))
+            emit(f"  [{section}] {entry['id']}: {str(name)[:60]}")
+    gaps = profile.get("gaps") or []
+    if gaps:
+        emit("  [gaps] " + ", ".join(
+            f"{gap['term']}{' (forbidden)' if gap.get('forbidden') else ''}" for gap in gaps))
+    return 0
 
 
 def discover(names):
@@ -75,6 +106,8 @@ def build_one(directory, strict=False):
         findings += checks.check_charset(cv)
         findings += checks.check_translations(profile, target, cv, lang)
 
+    findings += checks.check_open_questions(profile_path)
+
     # The cover letter travels with the CV, so it is held to the same rules.
     findings += checks.check_letter(
         ROOT / target.get("letter", f"applications/{directory.name}/letter.md"), profile)
@@ -95,7 +128,12 @@ def main():
     parser.add_argument("applications", nargs="*", help="application folder names")
     parser.add_argument("--strict", action="store_true", help="warnings fail the build")
     parser.add_argument("--list", action="store_true", help="list applications and exit")
+    parser.add_argument("--facts", nargs="?", const=DEFAULT_PROFILE, metavar="PROFILE",
+                        help="list the fact ids an overlay can point to, and exit")
     args = parser.parse_args()
+
+    if args.facts:
+        return list_facts(ROOT / args.facts)
 
     directories = discover(args.applications)
     if args.list:

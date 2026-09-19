@@ -136,7 +136,12 @@ def scan_gaps(entries, profile, code="gaps", allow_negation=False):
         if not term:
             continue
         forbidden = bool(gap.get("forbidden"))
-        pattern = re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE)
+        # Short names ("Go", "R", "C") only work as gap terms when case
+        # matters - otherwise every sentence containing "go" lights up, and
+        # the usual workaround (writing "Golang") misses the word people
+        # actually put on a CV.
+        flags = 0 if gap.get("case_sensitive") else re.IGNORECASE
+        pattern = re.compile(rf"\b{re.escape(term)}\b", flags)
         for where, text in entries:
             if not pattern.search(text):
                 continue
@@ -157,6 +162,34 @@ def scan_gaps(entries, profile, code="gaps", allow_negation=False):
                 f"{where}: '{term}' is listed as a gap in profile.yaml but is "
                 f"written as an owned skill. Mark it (\"{gap.get('hedge', 'ramp-up')}\") "
                 f"or drop it."))
+    return findings
+
+
+OPEN_QUESTION = re.compile(r"#\s*\?\s*(.*)")
+
+
+def check_open_questions(path):
+    """Keep the unverified fields of a profile visible until they are settled.
+
+    Drafting a profile from old documents always leaves a few things unsure - a
+    date nobody remembers, a title read off an outdated CV. Marking the line
+    `# ? why` records that; without this check the mark is a comment nobody
+    reads again, and the guess ships in a PDF.
+    """
+    path = Path(path)
+    if not path.exists():
+        return []
+    findings = []
+    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        match = OPEN_QUESTION.search(line)
+        if not match:
+            continue
+        field = line.split(":")[0].strip().lstrip("#- ") or "field"
+        note = match.group(1).strip()
+        findings.append(Finding(
+            "warning", "profile",
+            f"{path.name}:{number}: '{field}' is still an open question"
+            f"{' - ' + note if note else ''}. Settle it or remove the field."))
     return findings
 
 

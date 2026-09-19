@@ -2,7 +2,8 @@
 description: Build profile.yaml from the documents in sources/
 ---
 
-Read everything in `sources/` (CV, competency file, old applications, notes)
+Read everything in `sources/` except `sources/README.md`, which is part of the
+template (CV, competency file, old applications, notes)
 and draft `profile/profile.yaml` from it, using
 `profile/profile.example.yaml` and `profile/schema.md` as the reference.
 
@@ -15,8 +16,14 @@ Rules:
 - Keep contract titles exactly as written. For consulting work, put the
   employer and contract title in `employers:` and the client mission in
   `experience:`.
-- Where a source document is vague about a date, a title or a number, leave the
-  field out and list the question at the end. Do not guess.
+- Write down only what a source states. If the sources are vague or silent
+  about a date, a title, a number or an availability, leave the field out, or
+  write it with a trailing `# ? why` - the build reports those until they are
+  settled. Do not guess, not even for something as harmless-looking as a
+  notice period.
+- When two sources disagree, take the more conservative version and flag it.
+  An old CV saying "owner of the CI pipeline" against a review saying "jointly
+  with a platform engineer" resolves to the review, every time.
 - Fill `gaps:` with the things the sources show as weak, partial or absent, and
   ask me what else belongs there.
 - If a source names a client or a programme that may be confidential, flag it

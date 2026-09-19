@@ -76,7 +76,12 @@ could not choose. When it overflows:
   sizes the CV stops being readable at arm's length.
 
 `build.py` prints the remaining margin for both columns and fails below the
-minimum. It also warns when a page is too empty.
+minimum. It also warns when a page is too empty - which happens on an early
+career or a thin profile. The fix there is the reverse and in this order: put
+back a section the overlay dropped (projects, interests, education detail, a
+certification line), then a bullet that was cut, then a slightly larger type
+scale. Never pad with filler: an honest short CV beats a padded one, and a
+warning you decide to live with is a decision, not a failure.
 
 ### Keep the whole set consistent
 When a fact changes, it changes in `profile/profile.yaml`, once. Then rebuild
@@ -131,6 +136,7 @@ something under `sources/` or a real `profile.yaml`, stop.
 python build.py                       # build and check every application
 python build.py orbital-freight       # just one
 python build.py --strict              # warnings fail too
+python build.py --facts profile/profile.yaml   # the ids an overlay can point to
 python tools/md_to_pdf.py applications/<company>/letter.md
 python tools/md_to_pdf_rich.py notes.md --footer "Name"
 ```
@@ -147,6 +153,7 @@ python tools/md_to_pdf_rich.py notes.md --footer "Name"
 | `charset` | a character the PDF base fonts cannot draw |
 | `pages` | the content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom, or far too much |
+| `profile` | a field is still marked `# ?`, i.e. never verified |
 | `letter` | the cover letter states a gap as owned |
 | `i18n` | a printed field has no text in the language of that page |
 

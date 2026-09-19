@@ -181,3 +181,44 @@ def test_the_photo_is_drawn_when_the_profile_has_one():
     photo_margin = render(PROFILE, with_photo, tmp_pdf("photo"))[0][1]
     plain_margin = render(PROFILE, without, tmp_pdf("no_photo"))[0][1]
     assert plain_margin > photo_margin + 25      # the circle takes ~30mm
+
+
+def test_a_short_gap_term_can_be_matched_case_sensitively():
+    """"Go" is a language and a verb; the check has to tell them apart."""
+    profile = copy.deepcopy(PROFILE)
+    profile["gaps"].append({"term": "Go", "case_sensitive": True, "hedge": "reading level"})
+    claimed = overlay(skills=[{"label": "Languages", "value": "Python, Go, SQL"}])
+    prose = overlay(skills=[{"label": "Delivery", "value": "Ready to go to production"}])
+    assert [f for f in checks.check_gaps(build(profile, claimed), profile)]
+    assert not checks.check_gaps(build(profile, prose), profile)
+
+
+def test_an_open_question_in_the_profile_is_reported():
+    draft = tmp_pdf("profile").with_suffix(".yaml")
+    draft.write_text('availability: "Available in June"   # ? never stated anywhere\n',
+                     encoding="utf-8")
+    findings = checks.check_open_questions(draft)
+    assert findings and findings[0].level == "warning"
+    assert "availability" in findings[0].message
+
+
+def test_a_salaried_job_shows_both_its_title_and_its_framing():
+    """Without this, a `role:` override is dropped for anyone not a consultant."""
+    from pypdf import PdfReader
+
+    from cvkit.render import render
+
+    profile = copy.deepcopy(PROFILE)
+    profile["experience"] = [{
+        "id": "solo", "employer": "ACME", "employer_role": "QA Engineer",
+        "city": "Toulouse", "period": "2022 - present",
+        "bullets": [{"id": "b1", "text": "Ran the release test suite."}],
+    }]
+    target = {"experience": {"include": ["solo"],
+                             "overrides": {"solo": {"role": "Test infrastructure & CI",
+                                                    "bullets": [{"from": "b1"}]}}}}
+    output = tmp_pdf("salaried")
+    render(profile, target, output)
+    text = PdfReader(str(output)).pages[0].extract_text()
+    assert "QA Engineer" in text          # the contract title, a fact
+    assert "Test infrastructure" in text  # the framing for this offer
