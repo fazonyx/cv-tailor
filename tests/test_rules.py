@@ -136,3 +136,35 @@ def test_a_letter_denying_a_gap_is_accepted():
         "Docker and CI, and would need a few weeks in a real cluster.\n",
         encoding="utf-8")
     assert not [f for f in checks.check_letter(letter, PROFILE) if f.level == "error"]
+
+
+def test_a_missing_translation_on_a_printed_field_is_caught():
+    profile = copy.deepcopy(PROFILE)
+    for experience in profile["experience"]:
+        if experience["id"] == "northbay":
+            del experience["bullets"][0]["text"]["fr"]
+    target = overlay()
+    cv = build(profile, target, "fr")
+    findings = checks.check_translations(profile, target, cv, "fr")
+    assert any("nb-ingest" in finding.message or "nb-ingest" in str(finding)
+               for finding in findings)
+
+
+def test_a_missing_translation_outside_this_cv_stays_quiet():
+    profile = copy.deepcopy(PROFILE)
+    for experience in profile["experience"]:
+        if experience["id"] == "marlowe":          # not in the overlay
+            del experience["bullets"][0]["text"]["fr"]
+    target = overlay()
+    cv = build(profile, target, "fr")
+    assert not checks.check_translations(profile, target, cv, "fr")
+
+
+def test_an_intentionally_blank_translation_is_allowed():
+    profile = copy.deepcopy(PROFILE)
+    for experience in profile["experience"]:
+        if experience["id"] == "northbay":
+            experience["bullets"][0]["text"]["fr"] = ""
+    target = overlay()
+    cv = build(profile, target, "fr")
+    assert not checks.check_translations(profile, target, cv, "fr")

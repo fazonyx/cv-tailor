@@ -20,6 +20,12 @@ headline: { en: "Backend Engineer", fr: "Ingenieur Backend" }
 `pages: [en, fr]` in an overlay then produces one PDF with one page per
 language.
 
+A field written in *some* languages but not the one being printed is an error:
+the renderer would quietly fall back to another language. Write the missing
+text, or `fr: ""` to leave that field out of the French page on purpose. A
+plain string is never flagged - it is language-neutral by intent, which is what
+you want for a list of tools.
+
 ---
 
 ## profile.yaml

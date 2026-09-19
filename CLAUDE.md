@@ -148,6 +148,7 @@ python tools/md_to_pdf_rich.py notes.md --footer "Name"
 | `pages` | the content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom, or far too much |
 | `letter` | the cover letter states a gap as owned |
+| `i18n` | a printed field has no text in the language of that page |
 
 When a check fails, fix the content. Do not relax the check.
 

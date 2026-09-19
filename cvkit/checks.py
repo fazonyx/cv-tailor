@@ -10,6 +10,7 @@ These checks run on every build:
   pages     one page per declared language, never a silent overflow
   margins   white space left at the bottom of both columns
   letter    the cover letter is held to the same honesty rules as the CV
+  i18n      no field silently printed in the wrong language
 """
 import re
 from dataclasses import dataclass
@@ -211,6 +212,72 @@ def check_figures(cv, profile):
                     "warning", "figures",
                     f"{experience.id} [{bullet.source}]: reworded line claims "
                     f"'{number}', absent from the source fact. Check it is real."))
+    return findings
+
+
+LANG_KEY = re.compile(r"^[a-z]{2}(-[A-Z]{2})?$")
+
+
+def _is_translated_field(value):
+    """A {en: ..., fr: ...} mapping, as opposed to a normal dict of data."""
+    return (isinstance(value, dict) and value
+            and all(isinstance(key, str) and LANG_KEY.match(key) for key in value)
+            and all(isinstance(item, str) for item in value.values()))
+
+
+def _walk_translations(node, lang, path, findings):
+    if _is_translated_field(node):
+        if lang not in node:
+            available = ", ".join(sorted(node))
+            findings.append(Finding(
+                "error", "i18n",
+                f"{path}: no '{lang}' text (has {available}). The '{available.split(', ')[0]}' "
+                f"version would be printed on the '{lang}' page. Add it, or set "
+                f"{lang}: \"\" to leave it out on purpose."))
+        return
+    if isinstance(node, dict):
+        for key, value in node.items():
+            _walk_translations(value, lang, f"{path}.{key}" if path else str(key), findings)
+    elif isinstance(node, list):
+        for index, value in enumerate(node):
+            # An id reads better than an index when you go fix the file.
+            label = value.get("id") if isinstance(value, dict) else None
+            _walk_translations(value, lang, f"{path}[{label or index}]", findings)
+
+
+def check_translations(profile, target, cv, lang):
+    """Catch a field translated into some languages but not the rendered one.
+
+    The renderer falls back to another language rather than crashing, which is
+    the right behaviour for a PDF - and the wrong behaviour for a silence. An
+    English sentence in the middle of the French page is the kind of detail
+    that costs an interview.
+
+    Only what this application actually prints is checked: an untranslated
+    bullet in a mission left out of this CV is not a problem today.
+    """
+    used_ids = {experience.id for experience in cv.experience}
+    used_facts = {bullet.source for experience in cv.experience
+                  for bullet in experience.bullets}
+    used_groups = {experience.group for experience in cv.experience}
+
+    pruned = {key: value for key, value in profile.items()
+              if key not in ("experience", "employers", "gaps")}
+    pruned["employers"] = [employer for employer in profile.get("employers") or []
+                           if employer.get("id") in used_groups]
+    pruned["experience"] = []
+    for experience in profile.get("experience") or []:
+        if experience.get("id") not in used_ids:
+            continue
+        copy = dict(experience)
+        copy["bullets"] = [bullet for bullet in experience.get("bullets") or []
+                           if bullet.get("id") in used_facts]
+        pruned["experience"].append(copy)
+
+    findings = []
+    _walk_translations(pruned, lang, "profile", findings)
+    _walk_translations({key: value for key, value in (target or {}).items()
+                        if key != "meta"}, lang, "target", findings)
     return findings
 
 

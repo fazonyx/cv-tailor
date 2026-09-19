@@ -73,6 +73,7 @@ def build_one(directory, strict=False):
         findings += checks.check_gaps(cv, profile)
         findings += checks.check_figures(cv, profile)
         findings += checks.check_charset(cv)
+        findings += checks.check_translations(profile, target, cv, lang)
 
     # The cover letter travels with the CV, so it is held to the same rules.
     findings += checks.check_letter(

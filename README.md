@@ -79,6 +79,7 @@ Orbital Freight - Backend Platform Engineer
 | `pages` | content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom - or far too much |
 | `letter` | the cover letter claims a skill you listed as a gap |
+| `i18n` | a field is about to be printed in the wrong language |
 
 The `gaps` check is the one worth explaining. You write down once, in your
 profile, what you do not master:
@@ -124,7 +125,9 @@ nothing to install and nothing to license.
   hard-coded, so nothing silently overflows.
 - Employer bands for consultants: one contract, several client missions, the
   contract title locked and the mission framing free.
-- Bilingual CVs: one PDF, one page per language, each page checked separately.
+- Bilingual CVs: one PDF, one page per language, each page checked separately -
+  including for fields translated everywhere but the page being printed, which
+  otherwise fall back to another language in silence.
   The second example is English plus French - and the French page is where the
   one-page rule bites, because French runs longer
   ([see it](docs/images/preview-solutions-fr.png)).
