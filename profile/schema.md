@@ -136,6 +136,7 @@ meta:                            # documentation, not rendered
 
 profile: profile/profile.yaml    # default: profile/profile.example.yaml
 output: applications/orbital-freight/CV_Name_Company.pdf
+letter: applications/orbital-freight/letter.md   # checked too; this is the default
 pages: [en]                      # [en, fr] for a bilingual two-page PDF
 header_height_mm: 30             # shrink the dark band to gain a few lines
 

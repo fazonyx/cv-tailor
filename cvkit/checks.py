@@ -9,9 +9,11 @@ These checks run on every build:
   charset   no glyph the PDF base fonts cannot draw (the usual square box)
   pages     one page per declared language, never a silent overflow
   margins   white space left at the bottom of both columns
+  letter    the cover letter is held to the same honesty rules as the CV
 """
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 # Wordings that mark a skill as not-yet-owned. Keep them boring and honest:
 # a recruiter reads them as candour, an ATS still matches the keyword.
@@ -22,6 +24,13 @@ HEDGES = (
     # French equivalents, for bilingual CVs
     "sensibilisation", "bases", "notions academiques", "montee en competence",
     "en cours d'apprentissage", "ouvert a", "transferable",
+)
+
+# A cover letter is allowed to name a gap in order to deny it - that is the
+# honest move, and it must not be reported as a claim.
+NEGATIONS = (
+    " not ", "n't ", "never", " no ", "without", "yet to",
+    " pas ", "jamais", "aucun", "sans ",
 )
 
 LEVELS = ("error", "warning", "info")
@@ -65,14 +74,18 @@ def collect_strings(cv):
 # ---- individual checks -------------------------------------------
 def check_charset(cv):
     """PDF base fonts are Latin-1. Anything else silently renders as a box."""
+    return scan_charset(collect_strings(cv))
+
+
+def scan_charset(entries, code="charset"):
     findings = []
-    for where, text in collect_strings(cv):
+    for where, text in entries:
         for char in text:
             try:
                 char.encode("cp1252")
             except UnicodeEncodeError:
                 findings.append(Finding(
-                    "error", "charset",
+                    "error", code,
                     f"{where}: character {ascii(char)} (U+{ord(char):04X}) is not "
                     f"supported by the base fonts - it will render as a box"))
                 break
@@ -106,32 +119,73 @@ def check_gaps(cv, profile):
     an offer keeps asking for, and for the wording you must never use ("AWS
     Certified" while the exam is not passed).
     """
+    return scan_gaps(collect_strings(cv), profile, code="gaps")
+
+
+def scan_gaps(entries, profile, code="gaps", allow_negation=False):
+    """Run the gap terms over (location, text) pairs.
+
+    `allow_negation` is for prose: a cover letter that says "I have not run
+    Kubernetes in production" names the gap in order to deny it, which is the
+    honest move and must not be reported as a claim.
+    """
     findings = []
-    gaps = profile.get("gaps") or []
-    for gap in gaps:
+    for gap in profile.get("gaps") or []:
         term = gap.get("term")
         if not term:
             continue
         forbidden = bool(gap.get("forbidden"))
         pattern = re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE)
-        for where, text in collect_strings(cv):
+        for where, text in entries:
             if not pattern.search(text):
+                continue
+            padded = f" {text.lower()} "
+            if allow_negation and any(word in padded for word in NEGATIONS):
                 continue
             if forbidden:
                 findings.append(Finding(
-                    "error", "gaps",
+                    "error", code,
                     f"{where}: '{term}' is marked forbidden in profile.yaml - it "
                     f"does not go on a CV, however an offer words its "
                     f"requirements."))
                 continue
-            lowered = text.lower()
-            if any(hedge in lowered for hedge in HEDGES):
+            if any(hedge in padded for hedge in HEDGES):
                 continue
             findings.append(Finding(
-                "error", "gaps",
+                "error", code,
                 f"{where}: '{term}' is listed as a gap in profile.yaml but is "
                 f"written as an owned skill. Mark it (\"{gap.get('hedge', 'ramp-up')}\") "
                 f"or drop it."))
+    return findings
+
+
+def check_letter(path, profile):
+    """Hold the cover letter to the rules the CV is held to.
+
+    The letter is free prose, written last and read by nobody before it is
+    sent - which makes it exactly where an overclaim survives. Paragraph by
+    paragraph, the same gap terms apply, and so does the Latin-1 limit, since
+    the letter goes through the same PDF fonts.
+    """
+    path = Path(path)
+    if not path.exists():
+        return []
+    text = path.read_text(encoding="utf-8")
+
+    paragraphs, buffer, start = [], [], 1
+    for number, line in enumerate(text.splitlines() + [""], start=1):
+        if line.strip():
+            if not buffer:
+                start = number
+            buffer.append(line.strip())
+        elif buffer:
+            paragraphs.append((f"{path.name}:{start}", " ".join(buffer)))
+            buffer = []
+
+    findings = scan_gaps(paragraphs, profile, code="letter", allow_negation=True)
+    findings += scan_charset(paragraphs, code="letter")
+    findings.append(Finding("info", "letter",
+                            f"{path.name}: {len(paragraphs)} paragraph(s) checked"))
     return findings
 
 

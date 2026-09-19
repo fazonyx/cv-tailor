@@ -78,6 +78,7 @@ Orbital Freight - Backend Platform Engineer
 | `charset` | a character the PDF base fonts cannot draw (the usual square box) |
 | `pages` | content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom - or far too much |
+| `letter` | the cover letter claims a skill you listed as a gap |
 
 The `gaps` check is the one worth explaining. You write down once, in your
 profile, what you do not master:
@@ -129,6 +130,10 @@ nothing to install and nothing to license.
   ([see it](docs/images/preview-solutions-fr.png)).
 - Sections are data. Moving education to the sidebar to make room for a
   project is one line in the overlay.
+- The cover letter held to the same rules as the CV, paragraph by paragraph -
+  with the difference that prose is allowed to name a gap in order to deny it
+  ("I have not run Kubernetes in production" passes; "I run Kubernetes in
+  production" does not).
 - A cover letter converter (`tools/md_to_pdf.py`) matching the CV's palette,
   and a general Markdown-to-PDF converter for interview notes
   (`tools/md_to_pdf_rich.py`).

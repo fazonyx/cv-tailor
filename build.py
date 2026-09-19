@@ -74,6 +74,10 @@ def build_one(directory, strict=False):
         findings += checks.check_figures(cv, profile)
         findings += checks.check_charset(cv)
 
+    # The cover letter travels with the CV, so it is held to the same rules.
+    findings += checks.check_letter(
+        ROOT / target.get("letter", f"applications/{directory.name}/letter.md"), profile)
+
     emit(f"  output:  {output.relative_to(ROOT)}")
     for finding in findings:
         emit(finding)

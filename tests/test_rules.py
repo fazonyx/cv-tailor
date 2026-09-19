@@ -118,3 +118,21 @@ def test_the_type_scale_drives_vertical_space():
     roomy_margin = render(PROFILE, target, tmp_pdf("roomy"))[0][2]
     tight_margin = render(PROFILE, tight, tmp_pdf("tight"))[0][2]
     assert tight_margin > roomy_margin + 2
+
+
+def test_a_letter_claiming_a_gap_is_refused():
+    letter = tmp_pdf("letter").with_suffix(".md")
+    letter.write_text("Dear team,\n\nI run Kubernetes clusters in production.\n",
+                      encoding="utf-8")
+    findings = checks.check_letter(letter, PROFILE)
+    assert [f for f in findings if f.level == "error"]
+
+
+def test_a_letter_denying_a_gap_is_accepted():
+    """Naming a gap in order to deny it is the honest move, not a claim."""
+    letter = tmp_pdf("letter_honest").with_suffix(".md")
+    letter.write_text(
+        "Dear team,\n\nI have not run Kubernetes in production. I ship with "
+        "Docker and CI, and would need a few weeks in a real cluster.\n",
+        encoding="utf-8")
+    assert not [f for f in checks.check_letter(letter, PROFILE) if f.level == "error"]

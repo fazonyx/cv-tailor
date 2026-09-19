@@ -27,7 +27,8 @@ profile, and `python build.py` fails if it is not.
    checks.
 6. **Read the check output and fix it.** A `[FAIL]` is not advisory.
 7. **Then the letter.** `applications/<company>/letter.md`, converted with
-   `python tools/md_to_pdf.py`. It carries the gaps the CV cannot.
+   `python tools/md_to_pdf.py`. It carries the gaps the CV cannot - and it is
+   checked too: name a gap to deny it, never to claim it.
 
 ---
 
@@ -146,6 +147,7 @@ python tools/md_to_pdf_rich.py notes.md --footer "Name"
 | `charset` | a character the PDF base fonts cannot draw |
 | `pages` | the content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom, or far too much |
+| `letter` | the cover letter states a gap as owned |
 
 When a check fails, fix the content. Do not relax the check.
 
