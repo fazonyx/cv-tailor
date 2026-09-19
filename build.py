@@ -22,6 +22,19 @@ APPLICATIONS = ROOT / "applications"
 DEFAULT_PROFILE = "profile/profile.example.yaml"
 
 
+def emit(text=""):
+    """Print, even when the console cannot encode what a CV contains.
+
+    Windows consoles default to cp1252; an emoji pasted into a tag would
+    otherwise crash the build with a traceback instead of reporting itself.
+    """
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        encoding = sys.stdout.encoding or "ascii"
+        print(str(text).encode(encoding, "backslashreplace").decode(encoding))
+
+
 def discover(names):
     found = sorted(path.parent for path in APPLICATIONS.glob("*/target.yaml"))
     if not names:
@@ -44,8 +57,8 @@ def build_one(directory, strict=False):
     meta = target.get("meta") or {}
     heading = meta.get("company") or directory.name
     role = meta.get("role")
-    print(f"\n{heading}{' - ' + role if role else ''}")
-    print(f"  profile: {profile_path.relative_to(ROOT)}")
+    emit(f"\n{heading}{' - ' + role if role else ''}")
+    emit(f"  profile: {profile_path.relative_to(ROOT)}")
 
     margins = render(profile, target, output)
     theme = Theme.from_dict(
@@ -61,9 +74,9 @@ def build_one(directory, strict=False):
         findings += checks.check_figures(cv, profile)
         findings += checks.check_charset(cv)
 
-    print(f"  output:  {output.relative_to(ROOT)}")
+    emit(f"  output:  {output.relative_to(ROOT)}")
     for finding in findings:
-        print(finding)
+        emit(finding)
 
     failed = checks.has_errors(findings)
     if strict:
@@ -94,8 +107,8 @@ def main():
             if build_one(directory, args.strict):
                 failures.append(directory.name)
         except RuleViolation as error:
-            print(f"\n{directory.name}")
-            print(f"  [FAIL] rule: {error}")
+            emit(f"\n{directory.name}")
+            emit(f"  [FAIL] rule: {error}")
             failures.append(directory.name)
 
     print()

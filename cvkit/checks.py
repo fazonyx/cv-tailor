@@ -73,7 +73,7 @@ def check_charset(cv):
             except UnicodeEncodeError:
                 findings.append(Finding(
                     "error", "charset",
-                    f"{where}: character {char!r} (U+{ord(char):04X}) is not "
+                    f"{where}: character {ascii(char)} (U+{ord(char):04X}) is not "
                     f"supported by the base fonts - it will render as a box"))
                 break
     return findings
@@ -105,7 +105,7 @@ def check_gaps(cv, profile):
         term = gap.get("term")
         if not term:
             continue
-        pattern = re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE)
+        pattern = re.compile(rf"{re.escape(term)}", re.IGNORECASE)
         for where, text in collect_strings(cv):
             if not pattern.search(text):
                 continue
