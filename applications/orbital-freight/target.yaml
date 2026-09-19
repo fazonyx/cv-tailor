@@ -1,0 +1,76 @@
+# Application overlay - how the profile is framed for THIS offer.
+# It may reorder, drop and reword facts. It cannot create them.
+meta:
+  company: Orbital Freight
+  role: Backend Platform Engineer
+  location: Remote (EU)
+  source: applications/orbital-freight/offer.md
+  applied: 2027-01-12
+  # Honest read of the fit, written before the CV. Kept with the application.
+  fit: >
+    Strong on ingestion, API design and latency work. No Kubernetes in
+    production - stated as ramp-up, not hidden. No Kafka experience: the offer
+    calls it a plus, so it stays off the CV rather than being bluffed.
+
+profile: profile/profile.example.yaml
+output: applications/orbital-freight/CV_Alex_Morand_Orbital_Freight.pdf
+pages: [en]
+header_height_mm: 30
+
+headline: "Backend Engineer - High-Volume Ingestion, APIs & Latency"
+summary:
+  - "Three years on production backends: fleet telemetry ingestion, REST APIs consumed by operational teams, on-call."
+  - "Looking for a backend platform role where data volume and reliability are the hard part."
+
+availability: "Available from March 2027"
+hide_contact: [phone]
+
+layout:
+  right: [experience, skills, education, certifications]
+  left: [contact, badges, languages, projects, interests]
+
+experience:
+  include: [northbay, marlowe, kestrel, vireo]
+  overrides:
+    northbay:
+      role: "Backend Engineer - Vehicle Telemetry Platform"
+      tags: [Logistics, High volume]
+      bullets:
+        - from: nb-ingest
+        - from: nb-perf
+        - from: nb-api
+        - from: nb-oncall
+    marlowe:
+      role: "Backend Engineer - Billing Services"
+      tags: [Payments, Data migration]
+      bullets:
+        - from: mp-billing
+        - from: mp-migration
+        - from: mp-tests
+        - from: mp-support
+    kestrel:
+      role: "Backend Developer - Meter Data Pipeline"
+      tags: [Energy, Batch processing]
+      bullets:
+        - from: ku-rewrite
+        - from: ku-legacy
+    vireo:
+      bullets:
+        - from: va-etl
+
+skills:
+  - label: Languages
+    value: "Python (primary), SQL, Bash"
+  - label: Backend
+    value: "FastAPI, Django, REST API design, PostgreSQL, TimescaleDB, Redis, Celery"
+  - label: Data & scale
+    value: "Time-series ingestion, ETL pipelines, Airflow, schema migrations, caching"
+  - label: Run & deploy
+    value: "Docker, GitLab CI, Jenkins, on-call rotation, runbooks"
+  - label: Ramping up
+    value: "Kubernetes: ramp-up - Docker and CI in production, orchestration not yet"
+  - label: Practices
+    value: "pytest, contract testing, code review, incident post-mortems"
+
+projects:
+  include: [seedling, tideline]

@@ -1,0 +1,116 @@
+# Same profile, same facts, different offer.
+# Compare this file with applications/orbital-freight/target.yaml: that diff
+# is the whole method.
+#
+# This one is also bilingual: `pages: [en, fr]` produces a single PDF with an
+# English page and a French page, each checked against the one-page rule on its
+# own. Text written here in both languages uses the {en, fr} form.
+meta:
+  company: Quayside Systems
+  role: Solutions Engineer
+  location: Lyon, France - 30% travel
+  source: applications/quayside-systems/offer.md
+  applied: 2027-01-19
+  fit: >
+    The client-facing half of the consulting work carries this one: workshops,
+    increment demos, second-line support, handover. Gap is presales: never
+    owned a commercial conversation, so nothing on the CV claims it - it is
+    addressed head-on in the cover letter instead.
+
+profile: profile/profile.example.yaml
+output: applications/quayside-systems/CV_Alex_Morand_Quayside.pdf
+pages: [en, fr]
+header_height_mm: 30
+
+headline:
+  en: "Solutions Engineer - Customer-Facing Delivery & Python Backends"
+  fr: "Ingenieur Solutions - livraison au contact client & backends Python"
+summary:
+  - en: "Three years embedded in client teams: requirements workshops, increment demos, production support, handover."
+    fr: "Trois ans en equipe client: ateliers de cadrage, demonstrations d'increments, support de production, passation."
+  - en: "Backend engineer by training, most useful in the room where the customer explains the problem."
+    fr: "Ingenieur backend de formation, le plus utile dans la piece ou le client explique son probleme."
+
+availability:
+  en: "Available from March 2027"
+  fr: "Disponible a partir de mars 2027"
+
+# Education moves to the sidebar: on this offer the client-facing story needs
+# the room, and the degree is a checkbox rather than an argument.
+layout:
+  right: [experience, skills, projects, certifications]
+  left: [contact, badges, languages, education, interests]
+
+# Section headings are data too.
+titles:
+  projects: { en: "Built & shipped", fr: "Concu et livre" }
+
+experience:
+  include: [northbay, marlowe, kestrel, vireo]
+  overrides:
+    northbay:
+      role:
+        en: "Backend Engineer, embedded in the client's dispatch team"
+        fr: "Ingenieur Backend, integre a l'equipe de repartition du client"
+      tags: [Logistics, Customer-facing]
+      bullets:
+        - from: nb-workshops
+        - from: nb-api
+          text:
+            en: "Designed and shipped the REST API the dispatch team uses daily, from requirements workshops through to production."
+            fr: "Concu et livre l'API REST utilisee chaque jour par l'equipe de repartition, des ateliers de cadrage jusqu'a la production."
+        - from: nb-oncall
+        - from: nb-handover
+    marlowe:
+      role:
+        en: "Backend Engineer, working with the client's finance team"
+        fr: "Ingenieur Backend, au contact de l'equipe finance du client"
+      tags: [Payments, Support]
+      bullets:
+        - from: mp-demo
+        - from: mp-billing
+          text:
+            en: "Turned the finance team's invoicing rules, including proration and tax, into a working billing engine."
+            fr: "Traduit les regles de facturation de l'equipe finance, prorata et TVA compris, en un moteur de facturation operationnel."
+        - from: mp-support
+    kestrel:
+      role:
+        en: "Backend Developer, handover to the client's team"
+        fr: "Developpeur Backend, passation a l'equipe du client"
+      tags: [Energy, Documentation]
+      bullets:
+        # ku-legacy dropped: the French page ran to the bottom edge and
+        # maintenance work says the least to this employer. Cutting content is
+        # the fix, not a smaller font.
+        - from: ku-docs
+    vireo:
+      bullets:
+        - from: va-report
+
+skills:
+  - label: { en: Customer-facing, fr: Contact client }
+    value:
+      en: "Requirements workshops, increment demos, second-line support, technical handover"
+      fr: "Ateliers de cadrage, demos d'increments, support niveau 2, passation technique"
+  - label: { en: Delivery, fr: Livraison }
+    value:
+      en: "Scoping to production rollout, backlog shaping, documentation, runbooks"
+      fr: "Du cadrage au deploiement, construction du backlog, documentation, procedures"
+  - label: { en: Technical, fr: Technique }
+    value: "Python, SQL, REST API design, PostgreSQL, MySQL, Docker"
+  - label: { en: Data, fr: Donnees }
+    value:
+      en: "ETL pipelines, reporting automation, schema migrations"
+      fr: "Pipelines ETL, automatisation du reporting, migrations de schema"
+  - label: { en: Ramping up, fr: En apprentissage }
+    value:
+      en: "Kubernetes and Terraform: ramp-up. Presales: no commercial ownership yet"
+      fr: "Kubernetes et Terraform: montee en competence. Avant-vente: aucune responsabilite a ce jour"
+
+projects:
+  include: [seedling]
+
+interests:
+  - { en: "Bouldering", fr: "Escalade de bloc" }
+  - { en: "Film photography", fr: "Photographie argentique" }
+  - { en: "Board games", fr: "Jeux de societe" }
