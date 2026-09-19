@@ -161,3 +161,40 @@ When a check fails, fix the content. Do not relax the check.
 - Numbers only where they are real and already in the profile.
 - No adjectives about oneself. "Rigorous team player" says nothing.
 - Say less than you could. The CV opens the door; the interview walks through it.
+
+---
+
+## Working on this repository itself
+
+Everything above is about *using* cv-tailor. This last part is about *changing*
+it. See [memory.md](memory.md) for why things are the way they are before
+proposing to undo one of them.
+
+**Nothing personal gets committed.** `sources/`, `profile/profile.yaml` and
+`applications/_*/` are git-ignored so that real material can sit next to the
+examples while you work. Before any push, check what is staged; the point of a
+public repository about CVs is that it contains nobody's CV.
+
+**The example data is fictional and stays fictional.** Alex Morand, Helmvale
+Consulting, Orbital Freight and the rest are invented. If you need a denser
+example, invent more - never paste in a real profile, not even a redacted one.
+
+**The checks are the product.** A new rule is not documentation, it is a check.
+Each one needs two tests: one proving it fires, one proving it stays quiet on
+the legitimate case. A check that cries wolf gets disabled within a week, which
+is worse than no check.
+
+**Before committing:**
+
+```bash
+python -m pytest tests -q     # the guardrails
+python build.py               # the examples, and their checks
+python tools/preview.py       # only if the layout changed
+```
+
+A full rebuild must leave the working tree clean: PDFs are byte-reproducible on
+purpose, so a modified PDF in `git status` means the output really changed.
+
+**Keep it small.** No CLI, no plugin system, no second layout, no import from
+other CV formats. The repository is useful because one person can read all of
+it in an evening.
