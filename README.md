@@ -112,8 +112,8 @@ Then make it yours:
    `sources/`. That folder is git-ignored.
 2. Ask your assistant to read them and write `profile/profile.yaml`, using
    `profile/profile.example.yaml` as the reference (see
-   [profile/schema.md](profile/schema.md)). Correct it until every line is true
-   - everything downstream depends on this file.
+   [profile/schema.md](profile/schema.md)). Correct it until every line is true:
+   everything downstream depends on this file.
 3. Copy an example application folder, drop in a real offer, and start the loop.
 
 Requires Python 3.9+ and ReportLab. Fonts are the PDF base fonts, so there is
