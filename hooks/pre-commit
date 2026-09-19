@@ -1,0 +1,21 @@
+#!/bin/sh
+# Refuse to commit personal data.
+#
+#   git config core.hooksPath hooks
+#
+# Blocks anything staged under sources/ and any real profile, whatever the
+# .gitignore says - a `git add -f` on a tired evening is exactly the accident
+# this is here to catch.
+
+staged=$(git diff --cached --name-only)
+blocked=$(printf '%s\n' "$staged" | grep -E '^(sources/|profile/profile\.yaml$)')
+
+if [ -n "$blocked" ]; then
+    echo "pre-commit: refusing to commit personal data:"
+    printf '  %s\n' $blocked
+    echo
+    echo "These files are yours, not the repository's."
+    echo "If you really mean it: git commit --no-verify"
+    exit 1
+fi
+exit 0

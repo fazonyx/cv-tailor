@@ -1,0 +1,25 @@
+# --- your data, never committed ------------------------------------
+sources/*
+!sources/README.md
+profile/profile.yaml
+profile/*.local.yaml
+
+# --- generated PDFs --------------------------------------------------
+# The two example applications are committed as proof the build works;
+# everything else you generate stays local.
+*.pdf
+!applications/orbital-freight/*.pdf
+!applications/quayside-systems/*.pdf
+
+# --- python ----------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- editors / os ----------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,10 @@
+# Text files keep LF in the repository, whatever the OS they were written on.
+* text=auto eol=lf
+
+# Never touch binaries: CRLF conversion corrupts a PDF.
+*.pdf binary
+*.png binary
+*.jpg binary
+
+# The hook is executed by sh; it must keep LF even on Windows checkouts.
+hooks/pre-commit text eol=lf
