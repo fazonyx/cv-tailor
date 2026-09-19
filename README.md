@@ -128,8 +128,11 @@ nothing to install and nothing to license.
 - A cover letter converter (`tools/md_to_pdf.py`) matching the CV's palette,
   and a general Markdown-to-PDF converter for interview notes
   (`tools/md_to_pdf_rich.py`).
-- A GitHub Actions workflow that rebuilds the examples on every push, so the
-  one-page rule is enforced by CI and not by memory.
+- Tests on the guardrails themselves (`python -m pytest tests -q`): a bullet
+  with no source, an overlay promoting you to "Senior Staff Engineer", a gap
+  written as an owned skill - each one has a test proving it is refused.
+- A GitHub Actions workflow that runs those tests and rebuilds the examples on
+  every push, so the one-page rule is enforced by CI and not by memory.
 
 ## Your data stays yours
 
