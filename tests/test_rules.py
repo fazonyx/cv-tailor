@@ -195,10 +195,12 @@ def test_a_short_gap_term_can_be_matched_case_sensitively():
 
 def test_an_open_question_in_the_profile_is_reported():
     draft = tmp_pdf("profile").with_suffix(".yaml")
-    draft.write_text('availability: "Available in June"   # ? never stated anywhere\n',
-                     encoding="utf-8")
+    draft.write_text(
+        '# Questions are marked "# ?" - this header is documentation, not one.\n'
+        'availability: "Available in June"   # ? never stated anywhere\n',
+        encoding="utf-8")
     findings = checks.check_open_questions(draft)
-    assert findings and findings[0].level == "warning"
+    assert len(findings) == 1 and findings[0].level == "warning"
     assert "availability" in findings[0].message
 
 
