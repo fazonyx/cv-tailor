@@ -150,16 +150,18 @@ class CVCanvas:
     def _experience_height(self, subtitle, bullets, env, tags):
         theme = self.theme
         inner_w = theme.right_w - 9.5 * mm
-        height = 5.0 * mm
+        body_lh = theme.line_height(theme.size_body)
+        small_lh = theme.line_height(theme.size_small)
+        height = theme.line_height(theme.size_title) + 0.5 * mm
         if subtitle:
-            height += 4.2 * mm
+            height += theme.line_height(theme.size_subtitle) + 0.4 * mm
         if tags:
             height += 4.0 * mm
         for bullet in bullets:
-            height += 3.7 * mm * len(self.wrap(bullet, theme.font, theme.size_body, inner_w))
+            height += body_lh * len(self.wrap(bullet, theme.font, theme.size_body, inner_w))
         if env:
             height += 1.0 * mm
-            height += 3.4 * mm * len(self.wrap("Env. " + env, theme.font_italic,
+            height += small_lh * len(self.wrap("Env. " + env, theme.font_italic,
                                                theme.size_small, theme.right_w - 6 * mm))
         return height + 2.5 * mm
 
@@ -181,10 +183,10 @@ class CVCanvas:
         if period:
             self._text_right(PAGE_W - theme.mr - 2 * mm, y, period, theme.font_bold,
                              theme.size_small, "muted")
-        y -= 4.4 * mm
+        y -= theme.line_height(theme.size_title)
         if subtitle:
             self._text(x, y, subtitle, theme.font, theme.size_subtitle, "accent")
-            y -= 4.2 * mm
+            y -= theme.line_height(theme.size_subtitle) + 0.4 * mm
         if tags:
             self.tags(x, y, tags)
             y -= 4.0 * mm
@@ -193,13 +195,13 @@ class CVCanvas:
             self._text(x, y, BULLET, theme.font_bold, theme.size_body, "accent")
             for line in self.wrap(bullet, theme.font, theme.size_body, inner_w):
                 self._text(x + 3.2 * mm, y, line, theme.font, theme.size_body, "text")
-                y -= 3.7 * mm
+                y -= theme.line_height(theme.size_body)
         if env:
             y -= 1.0 * mm
             for line in self.wrap("Env. " + env, theme.font_italic, theme.size_small,
                                   theme.right_w - 6 * mm):
                 self._text(x, y, line, theme.font_italic, theme.size_small, "muted")
-                y -= 3.4 * mm
+                y -= theme.line_height(theme.size_small)
         self.y_right = top - height - 1.5 * mm
 
     def tags(self, x, y, labels):
@@ -221,7 +223,7 @@ class CVCanvas:
                       self.c.stringWidth(label, theme.font_bold, theme.size_body) + 3 * mm)
         for line in self.wrap(value, theme.font, theme.size_body, theme.right_w - label_w):
             self._text(theme.right_x + label_w, y, line, theme.font, theme.size_body, "text")
-            y -= 3.6 * mm
+            y -= theme.line_height(theme.size_body)
         self.y_right = y - 0.8 * mm
 
     def education(self, years, school, degree=None, detail=None):
@@ -233,13 +235,13 @@ class CVCanvas:
         if degree:
             self._text_right(PAGE_W - theme.mr, y, degree, theme.font_italic,
                              theme.size_small, "muted")
-        y -= 3.6 * mm
+        y -= theme.line_height(theme.size_body)
         if detail:
             for line in self.wrap(detail, theme.font, theme.size_small,
                                   theme.right_w - 18 * mm):
                 self._text(theme.right_x + 18 * mm, y, line, theme.font,
                            theme.size_small, "muted")
-                y -= 3.3 * mm
+                y -= theme.line_height(theme.size_small)
         self.y_right = y - 1.0 * mm
 
     def note_line(self, text):
@@ -249,7 +251,7 @@ class CVCanvas:
         self._text(theme.right_x, y, BULLET, theme.font_bold, theme.size_body, "accent")
         for line in self.wrap(text, theme.font, theme.size_body, theme.right_w - 3.5 * mm):
             self._text(theme.right_x + 3.2 * mm, y, line, theme.font, theme.size_body, "text")
-            y -= 3.7 * mm
+            y -= theme.line_height(theme.size_body)
         self.y_right = y - 0.6 * mm
 
     def links_line(self, links):
@@ -301,7 +303,7 @@ class CVCanvas:
                 self.link(theme.ml, y, line, url, theme.size_small)
             else:
                 self._text(theme.ml, y, line, font, theme.size_small, "text")
-            y -= 3.6 * mm
+            y -= theme.line_height(theme.size_small)
         self.y_left = y
 
     def badge(self, text, kind="green"):
@@ -340,7 +342,7 @@ class CVCanvas:
             for line in self.wrap(note, theme.font, theme.size_small - 0.8,
                                   theme.sidebar_content_w):
                 self._text(theme.ml, y, line, theme.font, theme.size_small - 0.8, "muted")
-                y -= 3.0 * mm
+                y -= theme.line_height(theme.size_small - 0.8)
         self.y_left = y - 1.4 * mm
 
     def project(self, name, period=None, description=None, stack=None, links=()):
@@ -354,13 +356,13 @@ class CVCanvas:
         for line in self.wrap(description or "", theme.font, theme.size_small - 0.6,
                               theme.sidebar_content_w):
             self._text(theme.ml, y, line, theme.font, theme.size_small - 0.6, "text")
-            y -= 3.1 * mm
+            y -= theme.line_height(theme.size_small - 0.6)
         if stack:
             for line in self.wrap(stack, theme.font_italic, theme.size_small - 1,
                                   theme.sidebar_content_w):
                 self._text(theme.ml, y, line, theme.font_italic,
                            theme.size_small - 1, "muted")
-                y -= 3.0 * mm
+                y -= theme.line_height(theme.size_small - 1)
         for label, url in links:
             self.link(theme.ml, y, label, url, theme.size_small - 0.6)
             y -= 3.2 * mm
@@ -376,7 +378,7 @@ class CVCanvas:
             if bullet and index == 0:
                 self._text(theme.ml, y, BULLET, theme.font_bold, theme.size_small, "accent")
             self._text(theme.ml + indent, y, line, theme.font, theme.size_small, "text")
-            y -= 3.5 * mm
+            y -= theme.line_height(theme.size_small)
         self.y_left = y
 
     def sidebar_education(self, years, school, degree=None):
@@ -387,7 +389,7 @@ class CVCanvas:
         for line in self.wrap(school, theme.font_bold, theme.size_small - 0.4,
                               theme.sidebar_content_w):
             self._text(theme.ml, y, line, theme.font_bold, theme.size_small - 0.4, "dark")
-            y -= 3.2 * mm
+            y -= theme.line_height(theme.size_small - 0.4)
         if degree:
             for line in self.wrap(degree, theme.font_italic, theme.size_small - 1,
                                   theme.sidebar_content_w):

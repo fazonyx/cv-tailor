@@ -55,7 +55,9 @@ have, there are exactly three honest moves:
 
 Never invent a MOOC, a home lab, a side project or a certification to fill a
 hole. Anything listed under `gaps:` in the profile fails the build if it appears
-without one of those markers.
+without one of those markers, and anything marked `forbidden: true` fails the
+build even when marked - that list is the person's own red line, so do not
+argue with it because an offer insists.
 
 ### Never claim a certification that is not passed
 "Exam scheduled", "retake in preparation", "in progress" - never "Certified".
@@ -66,7 +68,11 @@ space under the content. A page that runs to the edge reads as someone who
 could not choose. When it overflows:
 
 - cut a secondary bullet, condense an older mission, drop an interest;
-- **do not** shrink the font below the theme's base sizes or crush the leading.
+- a dense profile may need a slightly tighter type scale: a `theme:` block
+  in the overlay (`leading`, `size_body`) is legitimate, once, for a few
+  millimetres;
+- **do not** keep shrinking type to avoid making a choice. Below the base
+  sizes the CV stops being readable at arm's length.
 
 `build.py` prints the remaining margin for both columns and fails below the
 minimum. It also warns when a page is too empty.

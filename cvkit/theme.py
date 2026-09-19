@@ -53,6 +53,7 @@ class Theme:
     size_subtitle: float = 8.4
     size_body: float = 8.3
     size_small: float = 7.4
+    leading: float = 1.27          # line height, as a multiple of the font size
 
     @classmethod
     def from_dict(cls, data):
@@ -67,6 +68,10 @@ class Theme:
     # Colour accessors return reportlab colours, keeping YAML plain strings.
     def color(self, name):
         return _hex(getattr(self, name))
+
+    def line_height(self, size):
+        """Vertical step for a given font size, in points."""
+        return size * self.leading
 
     # ── Derived geometry, in points ──────────────────────────
     @property
