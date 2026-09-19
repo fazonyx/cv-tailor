@@ -184,7 +184,12 @@ def check_open_questions(path):
         match = OPEN_QUESTION.search(line)
         if not match:
             continue
-        field = line.split(":")[0].strip().lstrip("#- ") or "field"
+        field, _, _ = line.partition("#")
+        if not field.strip():
+            # A whole line of comment is documentation - including the header
+            # explaining this very convention. Only a field carries a question.
+            continue
+        field = field.split(":")[0].strip().lstrip("- ") or "field"
         note = match.group(1).strip()
         findings.append(Finding(
             "warning", "profile",
