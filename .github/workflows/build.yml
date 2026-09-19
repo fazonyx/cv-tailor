@@ -1,0 +1,36 @@
+name: build
+
+# Rebuilds the example applications on every push. The point is not that the
+# code compiles - it is that the one-page rule, the bottom margin and the
+# honesty checks still hold after a change.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build and check every application
+        run: python build.py
+
+      - name: Build the example cover letter
+        run: python tools/md_to_pdf.py applications/orbital-freight/letter.md
+
+      - name: Upload the generated PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-pdfs
+          path: applications/**/*.pdf
+          if-no-files-found: error
