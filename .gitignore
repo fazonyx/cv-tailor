@@ -4,6 +4,10 @@ sources/*
 profile/profile.yaml
 profile/*.local.yaml
 
+# Your own applications. Anything under applications/_<name>/ is local-only,
+# so you can work in a public fork without your material leaking into it.
+applications/_*/
+
 # --- generated PDFs --------------------------------------------------
 # The two example applications are committed as proof the build works;
 # everything else you generate stays local.
