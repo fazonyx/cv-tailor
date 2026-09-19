@@ -1,0 +1,261 @@
+# ---------------------------------------------------------------------------
+# EXAMPLE PROFILE - every person, company and project below is invented.
+# Replace it with your own facts, or keep it as a reference while you fill
+# profile/profile.yaml (which is git-ignored).
+#
+# Rule of the house: this file holds what is TRUE. An application overlay may
+# reorder it, drop parts of it and reword it - never add to it. If something
+# is not here, it does not belong on the CV.
+# ---------------------------------------------------------------------------
+
+identity:
+  name: Alex Morand
+  # Default headline, used when an overlay does not set its own.
+  headline:
+    en: "Backend Engineer - Python, APIs & Data Pipelines"
+    fr: "Ingenieur Backend - Python, API & pipelines de donnees"
+  summary:
+    - en: "Three years building and running backend services for logistics and payments, as a consultant embedded in client teams."
+      fr: "Trois ans a construire et exploiter des services backend pour la logistique et le paiement, en regie chez le client."
+
+contact:
+  location: "Lyon, France"
+  nationality: { en: "French citizen (EU)", fr: "Nationalite francaise (UE)" }
+  email: "alex.morand@example.com"
+  phone: "+33 6 00 00 00 00"
+  # photo: sources/photo.jpg      # optional, drawn as a circle in the sidebar
+  links:
+    - label: "linkedin.com/in/example"
+      url: "https://www.linkedin.com/in/example"
+    - label: "alexmorand.example.com"
+      url: "https://alexmorand.example.com"
+
+availability:
+  en: "Available from March 2027"
+  fr: "Disponible a partir de mars 2027"
+
+# Contract employers. One band per employer, several client missions under it.
+# Salaried without clients? Skip this block and leave `group:` unset.
+employers:
+  - id: helmvale
+    name: HELMVALE CONSULTING
+    role:
+      en: "Software Engineer (consultant)"
+      fr: "Ingenieur logiciel (consultant)"
+    period: { en: "2023 - present", fr: "2023 - aujourd'hui" }
+
+experience:
+  - id: northbay
+    group: helmvale
+    employer: HELMVALE CONSULTING
+    employer_role: "Software Engineer (consultant)"   # locked: contract title
+    client: NORTHBAY LOGISTICS
+    role:
+      en: "Backend Engineer - Fleet Tracking Platform"
+      fr: "Ingenieur Backend - plateforme de suivi de flotte"
+    city: "Lyon, France"
+    period: "2025"
+    tags: [Logistics, SaaS]
+    bullets:
+      - id: nb-ingest
+        text:
+          en: "Built the ingestion service receiving GPS pings from 4,000 vehicles and writing them to a time-series store."
+          fr: "Developpe le service d'ingestion recevant les positions GPS de 4 000 vehicules vers une base temporelle."
+      - id: nb-api
+        text:
+          en: "Designed and shipped the REST API consumed by the customer's dispatch application."
+          fr: "Concu et livre l'API REST utilisee par l'application de repartition du client."
+      - id: nb-perf
+        text:
+          en: "Reworked queries and added a cache layer, taking the tracking endpoint from 1.2s to 300ms at p95."
+          fr: "Retravaille les requetes et ajoute un cache: endpoint de suivi passe de 1,2 s a 300 ms au p95."
+      - id: nb-oncall
+        text:
+          en: "Joined the on-call rotation and wrote the runbooks for the three most frequent incidents."
+          fr: "Integre l'astreinte et redige les procedures pour les trois incidents les plus frequents."
+      - id: nb-workshops
+        text:
+          en: "Ran weekly workshops with the dispatch team to turn operational needs into a delivery backlog."
+          fr: "Anime des ateliers hebdomadaires avec l'equipe de repartition pour traduire les besoins en backlog."
+      - id: nb-handover
+        text:
+          en: "Documented the platform and handed it over to the client's in-house team at the end of the engagement."
+          fr: "Documente la plateforme et assure la passation a l'equipe interne du client en fin de mission."
+    env: "Python, FastAPI, PostgreSQL/TimescaleDB, Redis, Docker, GitLab CI"
+
+  - id: marlowe
+    group: helmvale
+    employer: HELMVALE CONSULTING
+    employer_role: "Software Engineer (consultant)"
+    client: MARLOWE PAYMENTS
+    role:
+      en: "Backend Engineer - Subscription Billing"
+      fr: "Ingenieur Backend - facturation par abonnement"
+    city: "Lyon, France"
+    period: "2024"
+    tags: [Payments, B2B]
+    bullets:
+      - id: mp-billing
+        text:
+          en: "Implemented the invoicing engine of a subscription product, including proration and tax rules."
+          fr: "Implemente le moteur de facturation d'un produit par abonnement (prorata, regles de TVA)."
+      - id: mp-migration
+        text:
+          en: "Migrated 90,000 customer records off a legacy schema with a reversible, audited script."
+          fr: "Migre 90 000 fiches clients depuis un schema historique via un script reversible et audite."
+      - id: mp-tests
+        text:
+          en: "Took the billing module from 40% to 85% test coverage and added contract tests on the payment provider."
+          fr: "Porte la couverture de tests du module de facturation de 40% a 85%, plus des tests de contrat sur le prestataire de paiement."
+      - id: mp-support
+        text:
+          en: "Handled second-line production support: log analysis, root cause, fix, post-mortem."
+          fr: "Assure le support de niveau 2 en production: analyse de logs, cause racine, correctif, post-mortem."
+      - id: mp-demo
+        text:
+          en: "Presented each two-week increment to the client's finance stakeholders."
+          fr: "Presente chaque increment de deux semaines aux referents finance du client."
+    env: "Python, Django, MySQL, Celery, pytest, Jenkins"
+
+  - id: kestrel
+    group: helmvale
+    employer: HELMVALE CONSULTING
+    employer_role: "Software Engineer (consultant)"
+    client: KESTREL UTILITIES
+    role:
+      en: "Backend Developer - Meter Data Services"
+      fr: "Developpeur Backend - donnees de comptage"
+    city: "Lyon, France"
+    period: "2023 - 2024"
+    tags: [Energy, Legacy]
+    bullets:
+      - id: ku-rewrite
+        text:
+          en: "Rewrote the nightly meter-data import, taking its runtime from 6 hours to 40 minutes."
+          fr: "Reecrit l'import nocturne des donnees de comptage: 6 heures d'execution ramenees a 40 minutes."
+      - id: ku-legacy
+        text:
+          en: "Maintained a ten-year-old Django application: bug fixes, dependency upgrades, first test harness."
+          fr: "Maintenu une application Django de dix ans: corrections, montees de version, premier harnais de tests."
+      - id: ku-docs
+        text:
+          en: "Wrote the onboarding guide for the service; the next two joiners shipped in their first week."
+          fr: "Redige le guide d'accueil du service; les deux arrivants suivants ont livre des leur premiere semaine."
+    env: "Python, Django, PostgreSQL, Bash"
+
+  - id: vireo
+    employer: VIREO ANALYTICS
+    employer_role:
+      en: "Data Engineering Intern"
+      fr: "Stagiaire Data Engineering"
+    city: "Grenoble, France"
+    period: { en: "2023 (6 months)", fr: "2023 (6 mois)" }
+    tags: [Data]
+    bullets:
+      - id: va-etl
+        text:
+          en: "Built an ETL pipeline consolidating five marketing sources into a reporting warehouse."
+          fr: "Developpe un pipeline ETL consolidant cinq sources marketing vers un entrepot de reporting."
+      - id: va-report
+        text:
+          en: "Automated a weekly report the analytics team had been producing by hand."
+          fr: "Automatise un rapport hebdomadaire jusque-la produit a la main par l'equipe analytics."
+    env: "Python, Airflow, SQL"
+
+education:
+  - id: imi
+    years: "2019-2023"
+    school: "Institut Marbeau d'Ingenierie, Lyon"
+    degree:
+      en: "Engineering degree (MSc equiv.), Computer Science"
+      fr: "Diplome d'ingenieur, informatique"
+    detail:
+      en: "Distributed systems, databases, software architecture."
+      fr: "Systemes distribues, bases de donnees, architecture logicielle."
+  - id: tarnbridge
+    years: "2022"
+    school: "University of Tarnbridge, Ireland"
+    degree:
+      en: "Exchange semester, taught in English"
+      fr: "Semestre d'echange, enseignement en anglais"
+  - id: saint-aubin
+    years: "2017-2019"
+    school: "IUT de Saint-Aubin"
+    degree:
+      en: "Two-year technical degree, Computer Science"
+      fr: "DUT informatique"
+
+certifications:
+  - id: aws-cp
+    text:
+      en: "AWS Cloud Practitioner - exam scheduled, not yet passed"
+      fr: "AWS Cloud Practitioner - examen prevu, pas encore obtenu"
+
+skills:
+  - label: { en: Languages, fr: Langages }
+    value: "Python (primary), SQL, JavaScript, Bash"
+  - label: { en: Backend, fr: Backend }
+    value: "FastAPI, Django, REST API design, PostgreSQL, MySQL, Redis, Celery"
+  - label: { en: Data, fr: Donnees }
+    value: "Time-series storage, ETL pipelines, Airflow, schema migrations"
+  - label: { en: Delivery, fr: Livraison }
+    value: "Docker, GitLab CI, Jenkins, Git, observability & runbooks"
+  - label: { en: Practices, fr: Methodes }
+    value: "Code review, pytest, contract testing, incident post-mortems, Scrum"
+
+languages:
+  - name: { en: French, fr: Francais }
+    level: { en: "Native", fr: "Langue maternelle" }
+    ratio: 1.0
+  - name: { en: English, fr: Anglais }
+    level: "C1"
+    ratio: 0.85
+    note:
+      en: "Daily working language with a US-based team for two years."
+      fr: "Langue de travail quotidienne avec une equipe americaine pendant deux ans."
+  - name: { en: Spanish, fr: Espagnol }
+    level: "B1"
+    ratio: 0.5
+
+projects:
+  - id: seedling
+    name: Seedling
+    period: "2024 - present"
+    description:
+      en: "Open-source CLI that generates realistic test data from a database schema. Built, documented and maintained solo."
+      fr: "CLI open source qui genere des jeux de donnees realistes depuis un schema de base. Concu, documente et maintenu seul."
+    stack: "Python, Click, PostgreSQL, GitHub Actions"
+    links:
+      - label: "seedling.example.com"
+        url: "https://seedling.example.com"
+  - id: tideline
+    name: Tideline
+    period: "2023"
+    description:
+      en: "Self-hosted dashboard tracking river levels from a public API, with alerting."
+      fr: "Tableau de bord auto-heberge des niveaux de riviere depuis une API publique, avec alertes."
+    stack: "Python, SQLite, Grafana"
+
+interests:
+  - { en: "Bouldering", fr: "Escalade de bloc" }
+  - { en: "Film photography", fr: "Photographie argentique" }
+  - { en: "Board games", fr: "Jeux de societe" }
+  - { en: "Open-source contributions", fr: "Contributions open source" }
+
+# ---------------------------------------------------------------------------
+# What you do NOT master. This list is the backbone of the honesty rules:
+# `python build.py` fails if any of these terms appears on a CV without a
+# hedge ("ramp-up", "open to", "basics", "academic", "transferable", ...).
+# Write them down once here; you can never forget one under deadline.
+# ---------------------------------------------------------------------------
+gaps:
+  - term: Kubernetes
+    hedge: "ramp-up"
+  - term: Terraform
+    hedge: "ramp-up"
+  # Prefer distinctive terms: matching is case-insensitive, so "Go" would
+  # fire on any sentence containing "go".
+  - term: Golang
+    hedge: "reading level"
+  - term: Kafka
+    hedge: "open to ramp up"
