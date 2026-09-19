@@ -116,7 +116,7 @@ Never restore the real name because it "sounds better".
 profile/profile.yaml         the facts. Single source of truth. Git-ignored.
 profile/profile.example.yaml a fictional profile, committed, use as reference.
 sources/                     CV, competency file, photo. Git-ignored, never committed.
-applications/<company>/
+applications/<company>/      git-ignored unless it is one of the two examples
     offer.md                 the job ad, as found
     target.yaml              the overlay: how the facts are framed for it
     letter.md                the cover letter

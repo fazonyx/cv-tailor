@@ -3,12 +3,19 @@
 #
 #   git config core.hooksPath hooks
 #
-# Blocks anything staged under sources/ and any real profile, whatever the
-# .gitignore says - a `git add -f` on a tired evening is exactly the accident
-# this is here to catch.
+# .gitignore already keeps your material out of the way. This is the second
+# lock, for the evening you reach for `git add -f` or `git add -A` after
+# renaming something: it blocks your sources, your real profile and any
+# application folder that is not one of the two examples shipped with the
+# template - the folder that holds a real offer, your reframed bullets and a
+# PDF with your name and phone number on it.
 
 staged=$(git diff --cached --name-only)
-blocked=$(printf '%s\n' "$staged" | grep -E '^(sources/|profile/profile\.yaml$)')
+
+blocked=$(printf '%s\n' "$staged" \
+    | grep -E '^(sources/|profile/profile\.yaml$|applications/)' \
+    | grep -v -E '^sources/README\.md$' \
+    | grep -v -E '^applications/(orbital-freight|quayside-systems)/')
 
 if [ -n "$blocked" ]; then
     echo "pre-commit: refusing to commit personal data:"

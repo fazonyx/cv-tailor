@@ -96,6 +96,14 @@ comes out half empty, and the honest answer is to put back a section rather
 than to pad. That is now written in CLAUDE.md, because the instinct is to
 invent something to fill the space.
 
+**`applications/` is default deny.** It used to be a normal tracked folder,
+with only a `applications/_*/` convention for local work - which protected
+nobody, because the natural thing to name a folder is `acme`, not `_acme`.
+Anyone using the template for real then had their offer, their reframed bullets
+and a PDF carrying their name sitting as untracked files, one `git add -A` away
+from a public fork. Now only the two example folders are tracked, and the
+pre-commit hook blocks the rest even when forced.
+
 ## Deliberately not done
 
 - **CI does not verify that the committed PDFs match a fresh build.** Tempting

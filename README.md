@@ -104,7 +104,8 @@ Tailoring a CV is legitimate; this is where it stops being tailoring.
 ```bash
 git clone https://github.com/fazonyx/cv-tailor && cd cv-tailor
 pip install -r requirements.txt
-python build.py            # builds the two fictional example applications
+git config core.hooksPath hooks   # blocks a commit containing your own data
+python build.py                   # builds the two fictional example applications
 ```
 
 Then make it yours:
@@ -162,17 +163,21 @@ can be reflected in the README instead of slowly drifting away from it.
 
 ## Your data stays yours
 
-`sources/`, `profile/profile.yaml` and generated PDFs are git-ignored. A
-`hooks/pre-commit` is included that refuses a commit containing anything from
-`sources/`; install it with:
+Using this repository means putting your CV, your real profile and real job
+applications inside a git working copy - so it is set up to refuse them by
+default, rather than to trust you at 1am.
 
-```bash
-git config core.hooksPath hooks
-```
+- `sources/` and `profile/profile.yaml` are git-ignored.
+- **Every folder you create under `applications/` is git-ignored too.** Only
+  the two fictional examples are tracked. Your application folder holds a real
+  offer, your reframed bullets and a PDF with your name and phone number on
+  it; it never becomes something you can push by accident.
+- `hooks/pre-commit` is the second lock, for the evening you reach for
+  `git add -f`. Install it with the line in the Quickstart above.
 
-If you fork this repository to keep your own applications in it, make the fork
-**private**. A CV is a pile of personal data, and a competency file often
-contains client names you are not free to publish.
+Even so, if you fork this to keep your own applications in it, a **private**
+fork is the safer habit: a competency file often carries client names you are
+not free to publish, and no ignore rule protects what you paste into a README.
 
 ## License
 

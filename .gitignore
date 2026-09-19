@@ -4,13 +4,18 @@ sources/*
 profile/profile.yaml
 profile/*.local.yaml
 
-# Your own applications. Anything under applications/_<name>/ is local-only,
-# so you can work in a public fork without your material leaking into it.
-applications/_*/
+# --- your applications ----------------------------------------------
+# Default deny. An application folder holds a real job offer, your reframed
+# bullets and a PDF with your name and phone number on it - so a folder you
+# create here stays local, and you have to mean it to commit one.
+# The two example folders are the exception: they are part of the template.
+applications/*
+!applications/orbital-freight/
+!applications/quayside-systems/
 
 # --- generated PDFs --------------------------------------------------
-# The two example applications are committed as proof the build works;
-# everything else you generate stays local.
+# The example PDFs are committed as proof the build works; everything else
+# you generate stays local.
 *.pdf
 !applications/orbital-freight/*.pdf
 !applications/quayside-systems/*.pdf
