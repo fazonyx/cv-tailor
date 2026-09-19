@@ -78,6 +78,7 @@ Orbital Freight - Backend Platform Engineer
 | `charset` | a character the PDF base fonts cannot draw (the usual square box) |
 | `pages` | content overflowed the declared number of pages |
 | `margins` | no white space left at the bottom - or far too much |
+| `profile` | a field is still marked `# ?`, i.e. drafted but never verified |
 | `letter` | the cover letter claims a skill you listed as a gap |
 | `i18n` | a field is about to be printed in the wrong language |
 
@@ -152,6 +153,7 @@ nothing to install and nothing to license.
 pip install -r requirements-dev.txt
 python -m pytest tests -q          # the guardrails have their own tests
 python build.py                    # rebuild and check the examples
+python build.py --facts P.yaml     # the fact ids an overlay can point to
 python tools/preview.py            # regenerate the images in this README
 ```
 
