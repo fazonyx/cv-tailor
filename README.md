@@ -90,6 +90,10 @@ gaps:
 
 After that, `Kubernetes` may appear on a CV only next to a marker - *ramp-up*,
 *transferable*, *basics*, *open to*, *academic*. Otherwise the build fails.
+`forbidden: true` goes further: the term is refused even when marked, for the
+skill you have never touched and for the wording you must never use ("AWS Certified"
+while the exam is not passed).
+
 Tailoring a CV is legitimate; this is where it stops being tailoring.
 
 ## Quickstart

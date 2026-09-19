@@ -3,6 +3,8 @@
     pip install pytest && python -m pytest tests -q
 """
 import copy
+import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -10,6 +12,10 @@ from cvkit import checks
 from cvkit.model import RuleViolation, build, load_yaml
 
 PROFILE = load_yaml("profile/profile.example.yaml")
+
+
+def tmp_pdf(name):
+    return Path(tempfile.gettempdir()) / f"cv_tailor_{name}.pdf"
 
 
 def overlay(**extra):
@@ -93,3 +99,22 @@ def test_margins_flag_both_a_full_page_and_an_empty_one():
     empty = checks.check_margins([("en", 40.0, 80.0)], 15, 45)
     assert cramped[0].level == "error"
     assert empty[0].level == "warning"
+
+
+def test_a_forbidden_term_is_refused_even_when_marked():
+    profile = copy.deepcopy(PROFILE)
+    profile["gaps"].append({"term": "Assembly", "forbidden": True})
+    target = overlay(skills=[{"label": "Languages", "value": "C, Assembly: basics"}])
+    findings = checks.check_gaps(build(profile, target), profile)
+    assert any("forbidden" in finding.message for finding in findings)
+
+
+def test_the_type_scale_drives_vertical_space():
+    """Shrinking the type must actually free room, or the knob is a lie."""
+    from cvkit.render import render
+
+    target = overlay(output="", pages=["en"])
+    tight = dict(target, theme={"size_body": 6.5, "leading": 1.15})
+    roomy_margin = render(PROFILE, target, tmp_pdf("roomy"))[0][2]
+    tight_margin = render(PROFILE, tight, tmp_pdf("tight"))[0][2]
+    assert tight_margin > roomy_margin + 2

@@ -98,16 +98,31 @@ def check_sources(cv):
 
 
 def check_gaps(cv, profile):
-    """A skill listed under `gaps:` may appear - never as an owned skill."""
+    """Two kinds of entry under `gaps:`.
+
+    The default one may appear on a CV as long as it is marked ("ramp-up",
+    "basics", "transferable"). One flagged `forbidden: true` may not appear at
+    all, marked or not - for the skill you have simply never practised and that
+    an offer keeps asking for, and for the wording you must never use ("AWS
+    Certified" while the exam is not passed).
+    """
     findings = []
     gaps = profile.get("gaps") or []
     for gap in gaps:
         term = gap.get("term")
         if not term:
             continue
-        pattern = re.compile(rf"{re.escape(term)}", re.IGNORECASE)
+        forbidden = bool(gap.get("forbidden"))
+        pattern = re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE)
         for where, text in collect_strings(cv):
             if not pattern.search(text):
+                continue
+            if forbidden:
+                findings.append(Finding(
+                    "error", "gaps",
+                    f"{where}: '{term}' is marked forbidden in profile.yaml - it "
+                    f"does not go on a CV, however an offer words its "
+                    f"requirements."))
                 continue
             lowered = text.lower()
             if any(hedge in lowered for hedge in HEDGES):

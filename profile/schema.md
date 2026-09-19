@@ -96,14 +96,24 @@ interests: ["Bouldering", "Film photography"]
 gaps:                            # what you do NOT master - see below
   - term: Kubernetes
     hedge: "ramp-up"
+  - term: Assembly               # never goes on a CV, marked or not
+    forbidden: true
 ```
+
+An employer band carries the contract dates, so the missions under it usually
+carry a shorter period ("2025") rather than repeating them.
 
 ### `gaps:` is the important one
 
 Each term listed here may appear on a CV only in a sentence that also contains
 a marker: *ramp-up*, *ramping up*, *open to*, *eager to*, *basics*, *notions*,
-*academic*, *transferable*, *exposure*, *familiar*, *reading*, *learning*.
-Otherwise `python build.py` fails.
+*academic*, *transferable*, *exposure*, *familiar*, *reading*, *learning*
+(French equivalents are accepted too). Otherwise `python build.py` fails.
+
+`forbidden: true` is the stronger form: the term may not appear at all, marked
+or not. Use it for the skill you have simply never practised and that offers
+keep asking for, and for the wording you must never use - "AWS Certified"
+while the exam is not passed, for instance.
 
 Write these down when you are calm, not when you are staring at a job ad that
 asks for all of them. Matching is case-insensitive, so prefer distinctive terms
@@ -190,6 +200,12 @@ palette, column width, margins, font sizes, and the two margin rules.
 theme:
   accent: "#2563EB"
   sidebar_w: 60
+  size_body: 7.8                 # the whole type scale is adjustable
+  leading: 1.22                  # line height, as a multiple of the font size
   bottom_margin_min: 15
   bottom_margin_max: 45
 ```
+
+`leading` is the knob to reach for when a dense profile misses the one-page
+rule by a few millimetres: line heights derive from it, so shrinking the type
+scale really does free vertical space. Past a point, cut content instead.
