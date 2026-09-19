@@ -342,6 +342,7 @@ def generate(input_path, output_path, footer=""):
         leftMargin=MARGIN_L, rightMargin=MARGIN_R,
         topMargin=MARGIN_TOP, bottomMargin=MARGIN_BOT,
         title=os.path.splitext(os.path.basename(output_path))[0],
+        invariant=1,
     )
     decor = lambda canvas, doc: _page_decor(canvas, doc, footer)
     doc.build(flow, onFirstPage=decor, onLaterPages=decor)

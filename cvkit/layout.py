@@ -21,7 +21,10 @@ WHITE = colors.white
 class CVCanvas:
     def __init__(self, path, theme=None, title=None, author=None):
         self.theme = theme or Theme()
-        self.c = rl_canvas.Canvas(path, pagesize=(PAGE_W, PAGE_H))
+        # invariant=1 drops the creation timestamp and the random file id,
+        # so rebuilding an unchanged CV produces a byte-identical PDF - a
+        # rebuild then leaves the repository clean, and a real change shows.
+        self.c = rl_canvas.Canvas(path, pagesize=(PAGE_W, PAGE_H), invariant=1)
         if title:
             self.c.setTitle(title)
         if author:

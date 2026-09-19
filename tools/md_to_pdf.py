@@ -145,7 +145,7 @@ def generate(input_path, output_path):
     pages = parse_md(input_path)
     title = os.path.splitext(os.path.basename(output_path))[0]
 
-    c = canvas.Canvas(output_path, pagesize=A4)
+    c = canvas.Canvas(output_path, pagesize=A4, invariant=1)   # reproducible output
     c.setTitle(title)
 
     for page_idx, blocks in enumerate(pages):
